@@ -1,0 +1,38 @@
+# Use the test database
+use test;
+
+# Create a collection
+db.friends.drop();
+db.friends.insertMany([
+   { _id: 1, person: "Rui", friends: ["Paulo","Joaquim"] },
+   { _id: 2, person: "Ines", friends: ["Rui","Jose"] },
+   { _id: 3, person: "Cristina", friends: ["Ines","Rui","Paulo"] },
+   { _id: 4, person: "Ana", friends: ["Cristina","Ines"]},
+   { _id: 5, person: "Paulo", friends: ["Cristina","Ines"]},
+   { _id: 6, person: "Joaquim", friends: ["Rui"]},
+   { _id: 7, person: "Jose", friends: ["Ana","Ines"]}
+])
+
+# Count the number of friends of a person  ###########################################################################################
+# Declare map and reduce functions
+var mapFunction1 = function() { 
+    var n=0;
+    for (var idx = 0; idx < this.friends.length; idx++) 
+    {
+        n=n+1;
+    }
+    // call mapper's emit() function  Key -> Value
+    emit(this.person,n); 
+};
+var reduceFunction1 = function(person, valuesFriends) {return Array.sum(valuesFriends);};
+
+
+# Perform map-reduce on all documents in the orders collection using the mapFunction1 map function and the reduceFunction1 reduce function:
+db.friends.mapReduce(mapFunction1,reduceFunction1, { out: "map_reduce_friends" });
+
+
+# Query the map_reduce_example collection to verify the results:
+db.map_reduce_friends.find();
+
+# drop the collection
+db.map_reduce_friends.drop();

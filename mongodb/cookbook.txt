@@ -1,0 +1,56 @@
+# Listar as BD
+show databases;
+
+# Comutar para dentro de uma BD
+use test;
+
+# Interrogar sobre a BD actual
+db
+
+# Listar as colecções dento de uma BD
+show collections;
+
+# Drop collection
+db.orders.drop();
+
+# Insert 
+db.orders.insertMany([
+  { _id: 1, cust_id: "Ant O. Knee", ord_date: new Date("2020-03-01"), price: 25, items: [ { sku: "oranges", qty: 5, price: 2.5 }, { sku: "apples", qty: 5, price: 2.5 } ], status: "A" },
+  { _id: 2, cust_id: "Ant O. Knee", ord_date: new Date("2020-03-08"), price: 70, items: [ { sku: "oranges", qty: 8, price: 2.5 }, { sku: "chocolates", qty: 5, price: 10 } ], status: "A" },
+  { _id: 3, cust_id: "Busby Bee", ord_date: new Date("2020-03-08"), price: 50, items: [ { sku: "oranges", qty: 10, price: 2.5 }, { sku: "pears", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 4, cust_id: "Busby Bee", ord_date: new Date("2020-03-18"), price: 25, items: [ { sku: "oranges", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 5, cust_id: "Busby Bee", ord_date: new Date("2020-03-19"), price: 50, items: [ { sku: "chocolates", qty: 5, price: 10 } ], status: "A"},
+  { _id: 6, cust_id: "Cam Elot", ord_date: new Date("2020-03-19"), price: 35, items: [ { sku: "carrots", qty: 10, price: 1.0 }, { sku: "apples", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 7, cust_id: "Cam Elot", ord_date: new Date("2020-03-20"), price: 25, items: [ { sku: "oranges", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 8, cust_id: "Don Quis", ord_date: new Date("2020-03-20"), price: 75, items: [ { sku: "chocolates", qty: 5, price: 10 }, { sku: "apples", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 9, cust_id: "Don Quis", ord_date: new Date("2020-03-20"), price: 55, items: [ { sku: "carrots", qty: 5, price: 1.0 }, 
+{ sku: "apples", qty: 10, price: 2.5 }, { sku: "oranges", qty: 10, price: 2.5 } ], status: "A" },
+  { _id: 10, cust_id: "Don Quis", ord_date: new Date("2020-03-23"), price: 25, items: [ { sku: "oranges", qty: 10, price: 2.5 } ], status: "A" }
+]);
+
+
+# Listar os objectos de uma colecção, no exemplo, a colecção orders
+# Equivalente a SELECT * FROM orders;
+db.orders.find();
+
+# Opcionalmente a opção Pretty
+db.orders.find().pretty();
+
+# Listar objectos de um colecção aplicando critérios
+# Equivalente a SELECT * FROM orders where _id=6;
+db.orders.find({"_id":6});
+# Equivalente a SELECT * FROM orders where _cust_id='Busy Bee' and price=25;
+db.orders.find({$and: [{"cust_id": "Busby Bee"},{"price":50}]});
+# Equivalente a SELECT * from orders where _id in (6,9);
+db.orders.find({"_id": {$in: [6,9]}});
+# Equivalente a SELECT * from orders where _id=6 or _id=9;
+db.orders.find({$or:[{"_id": 6}, {"_id":9}]});
+
+# Update
+#db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+#
+db.orders.update({"_id":6},{$set: {"cust_id":"Rui Pereira"}});
+
+
+# Delete
+db.orders.deleteMany( { _id: 6 } )

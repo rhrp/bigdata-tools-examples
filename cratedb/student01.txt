@@ -1,0 +1,6 @@
+CREATE USER student01 WITH (password = 'student01');
+grant DDL on SCHEMA student01 to student01;
+grant DQL on SCHEMA student01 to student01;
+grant DML on SCHEMA student01 to student01;
+grant DQL on SCHEMA sys to student01;
+grant DQL on table mtowm_v1.etmultisensor to student01;
