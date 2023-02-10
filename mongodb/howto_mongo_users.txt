@@ -1,0 +1,23 @@
+# Start mongodb-gui on a specific port
+PORT=5001 npm start
+
+# Start mongodb-gui using a user (but, dont limit to read only :-(
+URL=mongodb://mongodb_gui:123456@127.0.0.1:27017/orion-owm_v1 npm start
+
+# Create the user and tole
+use orion-owm_v1;
+db.createRole(
+   {
+     role: "apenasLer", 
+     privileges: [
+       { resource: { db: "orion-owm_v1", collection: "entities" }, actions: [ "find" ] }
+     ],
+     roles: []
+   }
+)
+db.createUser( { user: "mongodb_gui",
+                 pwd: "123456",
+                 customData: { description: 'Conta utilizada no mongodb-gui para leitura' },
+                 roles: ["apenasLer"]
+               },
+);
